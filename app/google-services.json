@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "328418207416",
+    "firebase_url": "https://food-hunter-f8f29.firebaseio.com",
+    "project_id": "food-hunter-f8f29",
+    "storage_bucket": "food-hunter-f8f29.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328418207416:android:382c403068faeb31",
+        "android_client_info": {
+          "package_name": "edu.hackathon.foodhunter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328418207416-aoe2fo3kevmsgoi5420v2o90vv29g4tj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.hackathon.foodhunter",
+            "certificate_hash": "979EFCAADC0C2D4F7476A95C752F2A759B962217"
+          }
+        },
+        {
+          "client_id": "328418207416-nt29gag9411bght47gtocgo6l6tm31an.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8RfR78CkN3U9bFqzG7PYoFIeL5OCZDkk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328418207416-nt29gag9411bght47gtocgo6l6tm31an.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,6 +3,7 @@
     <string name="top_menu">Menu</string>
     <string name="top_menu_add">Add</string>
     <string name="top_menu_share">Share</string>
+    <string name="top_menu_sort">Sort</string>
     <string name="default_food">Edible</string>
     <string name="default_time">TBD</string>
     <string name="default_date">TBD</string>

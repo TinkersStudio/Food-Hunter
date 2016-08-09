@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +16,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import edu.hackathon.foodhunter.tool.Dummy;
 
 /**
  * Main activity class
@@ -44,25 +47,73 @@ public class EventList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /**Init layout and listener*/
+        this.initLayout();
+        this.initListener();
+
         /*The origin list*/
-        this.eventList = new ArrayList<>();
-        this.sortedList = new ArrayList<>();
+        this.eventList = new ArrayList<Event>();
+        this.sortedList = new ArrayList<Event>();
 
         /*Setup the adapter view*/
         eventAdapter = new EventListAdapter(this.eventList);
         eventLayout.setAdapter(eventAdapter);
 
         //TODO: Implement some dummy test in resource
-        ArrayList<Event> downloadedEvent = this.getEventList();
+        //ArrayList<Event> downloadedEvent = this.getEventList();
+        ArrayList<Event> downloadedEvent = Dummy.dummyList();
         for (Event e:downloadedEvent) {
             //adding the event and notify the changes
             this.addEvent(e);
         }
 
-        //TODO: Implement call back so when the user pull down the list is reloaded
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                EventViewHolder eventViewHolder = (EventViewHolder) viewHolder;
+                int index = eventViewHolder.getAdapterPosition();
+
+				/* Swipe left to delete the event */
+                if (direction == ItemTouchHelper.LEFT) {
+                    eventList.remove(index);
+                    eventAdapter.notifyItemRemoved(index);
+                    //TODO:remove the event
+                }
+            }
+        };
+        //TODO: Implement to pull to update
     }
 
-    //TODO: Implement onSaveInstanceState and onRestoreInstanceState
+    /**
+     * Called onPause()
+     *
+     * @param outState
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        /* Save all UI stuff */
+        super.onSaveInstanceState(outState);
+        //save the value in here
+    }
+
+    /**
+     * Is called after onStart()
+     *
+     * @param savedInstanceState
+     */
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+        //Can restore the value in here
+    }
 
     /**
      * Initialize all of the layout
@@ -100,7 +151,6 @@ public class EventList extends AppCompatActivity {
 
     /**
      * Option select (top menu)
-     *
      * @param item
      * @return
      */
@@ -118,7 +168,6 @@ public class EventList extends AppCompatActivity {
                 updateEvent();
                 break;
             case R.id.submenu_share:
-                //TODO: Implement share
                 Toast.makeText(this, "The function is not yet completed",
                         Toast.LENGTH_LONG).show();
                 break;
@@ -132,11 +181,12 @@ public class EventList extends AppCompatActivity {
         return true;
     }
     /**
-     * This will download the list of the event from the server
-     * @return
+     * This will download the list of the event from the server.
+     * The method will parse the input from the server and return the correct list of event
+     * @return ArrayList</Event> the list of the event from the firebase server
      */
     protected ArrayList<Event> getEventList() {
-        //Retrieve the list of event from Firebase server
+        //TODO:Retrieve the list of event from Firebase server
         return new ArrayList<Event>();
     }
 
@@ -151,27 +201,28 @@ public class EventList extends AppCompatActivity {
     }
 
     /**
-     * Sort the list of the event to display to the screen
+     * Sort the list of the event in the sortList
      */
     protected void sort() {
-        //TODO: Sort the list of events
-        //SortedSet set = Collections.synchronizedSortedSet((SortedSet) eventList);
         Collections.sort(sortedList);
-        eventAdapter.notifyDataSetChanged();
     }
 
     /**
-     * Update the event to the server
+     * When the user click "Add"
+     * Update the event to the serv
+     * er.
      */
     protected void updateEvent () {
-        //Open the popup fragment on top of the old one
+        //TODO:Open the popup fragment on top of the old one
     }
 
     /**
      * Load the display of the main screen
+     * This is called when the user pull to load the screen
      */
     protected void loadMainScreen () {
-        //TODO: Need to implement
-        sortedList = getEventList();
+        eventList = getEventList();
+        //data will be changed so need to notify adapter
+        eventAdapter.notifyDataSetChanged();
     }
 }

@@ -9,7 +9,6 @@
     android:padding="1dp"
     android:background="@android:color/white">
     <!--whole block-->
-    <!--TODO:Fix padding and make the text closer-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

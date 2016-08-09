@@ -20,7 +20,7 @@ public class Event implements Comparable<Event>
     private String event;
 
     /**This is format and use internal to sort event based on date of the event*/
-    private Date dateFormat;
+    protected Date dateFormat;
 
     /**To order the list based on date created*/
     private Date dateCreated;
@@ -40,8 +40,13 @@ public class Event implements Comparable<Event>
 
     }
 
+    /**
+     * Parse user input to set date. If the date is invalid, push the date to the bottom of the list
+     * @param date
+     * @return
+     */
     protected boolean setDateFormat(String date) {
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateformat = new SimpleDateFormat("MM/dd/yyyy");
         try {
             this.dateFormat = dateformat.parse(date);
             return true;
@@ -101,8 +106,13 @@ public class Event implements Comparable<Event>
                 event1.getLocation().equals(this.location));
     }
 
+    /**
+     * Compare the method based on date
+     * @param event
+     * @return
+     */
     @Override
     public int compareTo(Event event) {
-        return 0;
+        return this.dateFormat.compareTo(event.dateFormat);
     }
 }

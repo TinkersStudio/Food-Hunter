@@ -1,6 +1,7 @@
 package edu.hackathon.foodhunter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -67,6 +68,7 @@ public class EventList extends AppCompatActivity {
             this.addEvent(e);
         }
 
+        /**
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT) {
             @Override
@@ -80,7 +82,7 @@ public class EventList extends AppCompatActivity {
                 EventViewHolder eventViewHolder = (EventViewHolder) viewHolder;
                 int index = eventViewHolder.getAdapterPosition();
 
-				/* Swipe left to delete the event */
+				// Swipe left to delete the event
                 if (direction == ItemTouchHelper.LEFT) {
                     eventList.remove(index);
                     eventAdapter.notifyItemRemoved(index);
@@ -88,6 +90,7 @@ public class EventList extends AppCompatActivity {
                 }
             }
         };
+        */
         //TODO: Implement to pull to update
     }
 
@@ -204,6 +207,7 @@ public class EventList extends AppCompatActivity {
      * Sort the list of the event in the sortList
      */
     protected void sort() {
+        //should sort main list
         Collections.sort(sortedList);
     }
 
@@ -214,6 +218,8 @@ public class EventList extends AppCompatActivity {
      */
     protected void updateEvent () {
         //TODO:Open the popup fragment on top of the old one
+        Intent addWindow = new Intent(this.getBaseContext(), AddWindow.class);
+        startActivity(addWindow);
     }
 
     /**

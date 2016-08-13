@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.w3c.dom.Text;
 
 /**
@@ -23,9 +26,16 @@ public class AddWindow extends Activity {
     protected TextView eventText;
 
     protected Event createdEvent;
+
+    private DatabaseReference mDatabase;
+
     @Override
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
+        //get the database
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
         createdEvent = null;
         initLayout();
         initListener();
@@ -49,7 +59,7 @@ public class AddWindow extends Activity {
             @Override
             public void onClick(View v) {
                 if(!validateEvent()) {
-                    //the event is not valid
+                    //the event is not valid. print something
                 }
                 else {
                     sendEvent(createdEvent);
@@ -70,6 +80,7 @@ public class AddWindow extends Activity {
 
     public void sendEvent(Event event) {
         //get the field from the list
+        //mDatabase.child("")
 
         //send it to the server
     }
@@ -81,6 +92,7 @@ public class AddWindow extends Activity {
                 ||this.dateText.getText().equals("") || this.locationText.equals("")) {
             return false;
         }
+        //getText().toString()
         /**
         createdEvent = new Event(this.eventText.getText(), this.locationText.getText(),
                 this.foodText.getText(), this.dateText.getText(),

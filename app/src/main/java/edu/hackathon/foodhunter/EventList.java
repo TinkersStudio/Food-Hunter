@@ -12,6 +12,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,6 +47,10 @@ public class EventList extends AppCompatActivity {
     /**Menu used the app*/
     protected Menu mainMenu;
 
+    /*Database*/
+    private DatabaseReference mDatabase;
+    DatabaseReference refDatabase;
+
     /*Debugging TAG. Use in log*/
     private static final String TAG = Activity.class.getName();
 
@@ -51,6 +61,8 @@ public class EventList extends AppCompatActivity {
         /**Init layout and listener*/
         this.initLayout();
         this.initListener();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        refDatabase = mDatabase.child("event");
 
         /*The origin list*/
         this.eventList = new ArrayList<Event>();
@@ -67,33 +79,25 @@ public class EventList extends AppCompatActivity {
             //adding the event and notify the changes
             this.addEvent(e);
         }
-
-        /**
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
-                                  RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                EventViewHolder eventViewHolder = (EventViewHolder) viewHolder;
-                int index = eventViewHolder.getAdapterPosition();
-
-				// Swipe left to delete the event
-                if (direction == ItemTouchHelper.LEFT) {
-                    eventList.remove(index);
-                    eventAdapter.notifyItemRemoved(index);
-                    //TODO:remove the event
-                }
-            }
-        };
-        */
         //TODO: Implement to pull to update
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        refDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
     /**
      * Called onPause()
      *

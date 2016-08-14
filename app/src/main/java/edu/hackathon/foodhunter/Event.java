@@ -1,8 +1,12 @@
 package edu.hackathon.foodhunter;
 
+import android.widget.Toast;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by kid on 8/6/16.
@@ -16,6 +20,9 @@ public class Event implements Comparable<Event>
     private String date;
     private String time;
 
+    /**location of the event*/
+    private String location;
+
     /**Event*/
     private String event;
 
@@ -25,8 +32,10 @@ public class Event implements Comparable<Event>
     /**To order the list based on date created*/
     private Date dateCreated;
 
-    /**location of the event*/
-    private String location;
+    public Event() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
     public Event( String event, String location, String food, String date, String time) {
         this.food = food;
         this.location = location;
@@ -37,7 +46,6 @@ public class Event implements Comparable<Event>
             this.food = "ERROR";
             this.location = "404";
         }
-
     }
 
     /**
@@ -53,6 +61,7 @@ public class Event implements Comparable<Event>
         }
         catch (ParseException e) {
             //the origin of time to push it to the bottom
+            //1/1/1970
             this.dateFormat.setTime(0);
             return false;
         }
@@ -115,4 +124,17 @@ public class Event implements Comparable<Event>
     public int compareTo(Event event) {
         return this.dateFormat.compareTo(event.dateFormat);
     }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("food", this.food);
+        result.put("location", this.location);
+        result.put("date", this.date);
+        result.put("time", this.time);
+        result.put("event", this.event);
+
+        return result;
+
+    }
+
 }

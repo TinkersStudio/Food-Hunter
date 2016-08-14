@@ -21,6 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -61,8 +64,25 @@ public class EventList extends AppCompatActivity {
         /**Init layout and listener*/
         this.initLayout();
         this.initListener();
+
+        // [START initialize_database_ref]
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        refDatabase = mDatabase.child("event");
+        // [END initialize_database_ref]
+        refDatabase = mDatabase.child("events");
+
+        // Attach a listener to read the data at our events reference
+        refDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
+                //List<Event> events =
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
 
         /*The origin list*/
         this.eventList = new ArrayList<Event>();
@@ -96,7 +116,6 @@ public class EventList extends AppCompatActivity {
 
             }
         });
-
     }
     /**
      * Called onPause()

@@ -32,7 +32,7 @@ import edu.hackathon.foodhunter.tool.Dummy;
 /**
  * Main activity class
  */
-public class EventList extends AppCompatActivity {
+public class EventList extends AppCompatActivity implements AddWindowFragment.OnFragmentInteractionListener{
 
 
     /**List of event*/
@@ -53,6 +53,8 @@ public class EventList extends AppCompatActivity {
     /*Database*/
     private DatabaseReference mDatabase;
     DatabaseReference refDatabase;
+
+    protected Event createdEvent;
 
     /*Debugging TAG. Use in log*/
     private static final String TAG = Activity.class.getName();
@@ -253,5 +255,10 @@ public class EventList extends AppCompatActivity {
         eventList = getEventList();
         //data will be changed so need to notify adapter
         eventAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void AddWindowListener(String event) {
+
     }
 }

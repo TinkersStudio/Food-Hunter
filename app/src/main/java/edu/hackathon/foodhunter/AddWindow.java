@@ -57,8 +57,6 @@ public class AddWindow extends Activity{
         super.onCreate(saveInstanceState);
         //get the database
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
-
         createdEvent = null;
         initLayout();
         initListener();
@@ -83,8 +81,6 @@ public class AddWindow extends Activity{
      * If the event is not correct display the error
      */
     public void initListener() {
-        //FIXME: Fix the listener and the thread
-
         huntButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +122,7 @@ public class AddWindow extends Activity{
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                //finish();
             }
         });
     }
@@ -146,21 +142,21 @@ public class AddWindow extends Activity{
     }
 
     protected boolean validateFoodText() {
-        if (this.e_food.equals("")) {
+        if (this.e_food.isEmpty()) {
             return false;
         }
         return true;
     }
 
     protected boolean validateLocationText() {
-        if(this.e_location.equals("")) {
+        if(this.e_location.isEmpty()) {
             return false;
         }
         return true;
     }
 
     protected boolean validateDateText() {
-        if(this.e_date.equals("")) {
+        if(this.e_date.isEmpty()) {
             return false;
         }
 
@@ -178,7 +174,7 @@ public class AddWindow extends Activity{
     }
 
     protected boolean validateTimeText() {
-        if(this.e_time.equals("")) {
+        if(this.e_time.isEmpty()) {
             return false;
         }
 
@@ -235,6 +231,8 @@ public class AddWindow extends Activity{
         protected void onPostExecute(String s) {
             super.onPreExecute();
             Toast.makeText(AddWindow.this, "Finish uploading...", Toast.LENGTH_SHORT).show();
+
+            //TODO: Snack bar in here
         }
     }
 }

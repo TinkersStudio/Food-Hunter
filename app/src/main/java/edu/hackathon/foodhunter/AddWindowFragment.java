@@ -21,6 +21,10 @@ import edu.hackathon.foodhunter.AddWindow;
 
 /**
  * Created by Owner on 9/12/2016.
+ * This class is used when in case of needing moving the AddWindow Activity to Fragment type
+ * Since I couldn't figure this out, I decided to use Activity approach instead. It is slower
+ * but work without any problem.
+ * THIS CLASS IS NOT WORKING - REFER TO ADDWINDOW FOR A WORKING VERSION
  */
 public class AddWindowFragment extends Fragment {
 
@@ -83,7 +87,6 @@ public class AddWindowFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                     //something
                     //sendEvent(createdEvent);
-                    //TODO: Use snack bar to display something
                 }
                 //finish();
                 getActivity().getFragmentManager().popBackStack();
@@ -132,7 +135,6 @@ public class AddWindowFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void AddWindowListener(String event);
     }
 
@@ -167,8 +169,6 @@ public class AddWindowFragment extends Fragment {
     }
 
     protected boolean validateDateText() {
-        //TODO: Check the format of the date input
-
         if(this.dateText.getText().toString().trim().equals("")) {
             return false;
         }

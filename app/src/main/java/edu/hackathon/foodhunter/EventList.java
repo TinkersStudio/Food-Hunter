@@ -2,16 +2,21 @@ package edu.hackathon.foodhunter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,9 +37,7 @@ import edu.hackathon.foodhunter.tool.Dummy;
 /**
  * Main activity class
  */
-public class EventList extends AppCompatActivity implements AddWindowFragment.OnFragmentInteractionListener{
-
-
+public class EventList extends AppCompatActivity {
     /**List of event*/
     protected ArrayList<Event> eventList;
 
@@ -50,11 +53,8 @@ public class EventList extends AppCompatActivity implements AddWindowFragment.On
     /**Menu used the app*/
     protected Menu mainMenu;
 
-    /*Database*/
-    private DatabaseReference mDatabase;
-    DatabaseReference refDatabase;
-
-    protected Event createdEvent;
+    /**Reference to the root of the app's database*/
+    Firebase m_rootRef;
 
     /*Debugging TAG. Use in log*/
     private static final String TAG = Activity.class.getName();
@@ -67,57 +67,57 @@ public class EventList extends AppCompatActivity implements AddWindowFragment.On
         this.initLayout();
         this.initListener();
 
-        // [START initialize_database_ref]
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        // [END initialize_database_ref]
-        refDatabase = mDatabase.child("events");
-
-        // Attach a listener to read the data at our events reference
-        refDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //Map<String, Object> td = (HashMap<String,Object>) dataSnapshot.getValue();
-                //List<Event> events =
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-
         /*The origin list*/
         this.eventList = new ArrayList<Event>();
         this.sortedList = new ArrayList<Event>();
 
-        /*Setup the adapter view*/
+         /*Setup the adapter view*/
         eventAdapter = new EventListAdapter(this.eventList);
         eventLayout.setAdapter(eventAdapter);
 
-        //TODO: Implement some dummy test in resource
-        //ArrayList<Event> downloadedEvent = this.getEventList();
-        ArrayList<Event> downloadedEvent = Dummy.dummyList();
-        for (Event e:downloadedEvent) {
-            //adding the event and notify the changes
-            this.addEvent(e);
-        }
-        //TODO: Implement to pull to update
-    }
+        //Event break at firebase ref
+        Firebase.setAndroidContext(this);
+        //FIXME Can't retrieve the database
+        m_rootRef = new Firebase("https://food-hunter-f8f29.firebaseio.com/");
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        refDatabase.addValueEventListener(new ValueEventListener() {
+        //reference to nodes
+        Firebase m_eventRef = m_rootRef.child("events");
+        //event listener
+
+        m_eventRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
+            public void onChildAdded(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+                Event event = dataSnapshot.getValue(Event.class);
+                EventList.this.addEvent(event);
+                Log.v(TAG, "Add new value");
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onChildChanged(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+                Event event = dataSnapshot.getValue(Event.class);
+                Log.v(TAG, "Modify the value");
+            }
 
+            @Override
+            public void onChildRemoved(com.firebase.client.DataSnapshot dataSnapshot) {
+                Event event = dataSnapshot.getValue(Event.class);
+                Log.v(TAG, "Removed event");
+            }
+
+            @Override
+            public void onChildMoved(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+                //IGNORE for now
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.v(TAG, "Cancel due to error");
             }
         });
+    }
+
+    protected void onStart() {
+        super.onStart();
     }
     /**
      * Called onPause()
@@ -160,7 +160,7 @@ public class EventList extends AppCompatActivity implements AddWindowFragment.On
      * Initialize all listener
      */
     protected void initListener() {
-
+        //mainMenu = (Menu)findViewById(R.id.)
     }
 
     /**
@@ -184,7 +184,6 @@ public class EventList extends AppCompatActivity implements AddWindowFragment.On
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         //have to use the selection above
         switch (item.getItemId()) {
             case R.id.menu_filter:
@@ -238,11 +237,9 @@ public class EventList extends AppCompatActivity implements AddWindowFragment.On
 
     /**
      * When the user click "Add"
-     * Update the event to the serv
-     * er.
+     * Update the event to the server window is open.
      */
     protected void updateEvent () {
-        //TODO:Open the popup fragment on top of the old one
         Intent addWindow = new Intent(this.getBaseContext(), AddWindow.class);
         startActivity(addWindow);
     }
@@ -257,8 +254,39 @@ public class EventList extends AppCompatActivity implements AddWindowFragment.On
         eventAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void AddWindowListener(String event) {
+    /**
+     * Inner class that handle downloading
+     */
+    public class DownloadTask extends AsyncTask<Void, Void, String> {
+        /**
+         * Override this method to perform a computation on a background thread. The
+         * specified parameters are the parameters passed to {@link #execute}
+         * by the caller of this task.
+         * <p/>
+         * This method can call {@link #publishProgress} to publish updates
+         * on the UI thread.
+         *
+         * @param params The parameters of the task.
+         * @return A result, defined by the subclass of this task.
+         * @see #onPreExecute()
+         * @see #onPostExecute
+         * @see #publishProgress
+         */
+        @Override
+        protected String doInBackground(Void... params) {
+            return "Success";
+        }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(EventList.this, "Start downloading...", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPreExecute();
+            Toast.makeText(EventList.this, "Finish downloading...", Toast.LENGTH_SHORT).show();
+        }
     }
 }

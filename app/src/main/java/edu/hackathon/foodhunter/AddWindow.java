@@ -100,9 +100,6 @@ public class AddWindow extends Activity{
                 AddWindow.this.e_time = AddWindow.this.timeText.getText().toString().trim();
                 AddWindow.this.e_location = AddWindow.this.locationText.getText().toString().trim();
 
-                //When add this in the function, the validation break the app
-                //FIXME Fix validation
-
                 if (!validateTimeText()) {
                     Toast.makeText(getApplicationContext(), "Missing time",
                             Toast.LENGTH_SHORT).show();
@@ -231,7 +228,6 @@ public class AddWindow extends Activity{
             super.onPreExecute();
             Toast.makeText(AddWindow.this, "Finish uploading...", Toast.LENGTH_SHORT).show();
 
-            //TODO: Snack bar in here
         }
     }
 }

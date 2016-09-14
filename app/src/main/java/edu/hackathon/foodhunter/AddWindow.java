@@ -41,11 +41,13 @@ public class AddWindow extends Activity{
     /**Event that is created*/
     protected Event createdEvent;
 
+    /**Reference of the data firebase*/
     private DatabaseReference mDatabase;
 
     /*Debugging TAG. Use in log*/
     private static final String TAG = Activity.class.getName();
 
+    /**String value for the event*/
     protected String e_event;
     protected String e_food;
     protected String e_date;
@@ -57,14 +59,20 @@ public class AddWindow extends Activity{
         super.onCreate(saveInstanceState);
         //get the database
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        //no event at the moment
         createdEvent = null;
+        //Inflate all of the layout
         initLayout();
+        //add the listener
         initListener();
     }
 
-
+    /**
+     * Inflate the layout and initialize all of the component
+     */
     public void initLayout() {
         setContentView(R.layout.fragment_layout);
+        //button
         this.huntButton = (Button) findViewById(R.id.hunt_button);
         this.cancelButton = (Button) findViewById(R.id.cancel_button);
         //text
@@ -83,7 +91,8 @@ public class AddWindow extends Activity{
     public void initListener() {
         huntButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 /** Get the value to the variable*/
                 AddWindow.this.e_date = AddWindow.this.dateText.getText().toString().trim();
                 AddWindow.this.e_event = AddWindow.this.eventText.getText().toString().trim();
@@ -91,30 +100,34 @@ public class AddWindow extends Activity{
                 AddWindow.this.e_time = AddWindow.this.timeText.getText().toString().trim();
                 AddWindow.this.e_location = AddWindow.this.locationText.getText().toString().trim();
 
-                if(!validateEvent()) {
-                    if (!validateTimeText()) {
-                        Toast.makeText(getApplicationContext(), "Missing time",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    else if(!validateLocationText()) {
-                        Toast.makeText(getApplicationContext(), "Missing location",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    else if(!validateDateText()) {
-                        Toast.makeText(getApplicationContext(), "Missing date or wrong format. " +
-                                        "Correct format: MM/dd/yyyy",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    else if(!validateFoodText()) {
-                        Toast.makeText(getApplicationContext(), "Missing food",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                //When add this in the function, the validation break the app
+                //FIXME Fix validation
+
+                if (!validateTimeText()) {
+                    Toast.makeText(getApplicationContext(), "Missing time",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else if(!validateLocationText()) {
+                    Toast.makeText(getApplicationContext(), "Missing location",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else if(!validateDateText()) {
+                    Toast.makeText(getApplicationContext(), "Missing date or wrong format. " +
+                                    "Correct format: MM/dd/yyyy",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else if(!validateFoodText()) {
+                    Toast.makeText(getApplicationContext(), "Missing food",
+                            Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //Testing
+                    createdEvent = new Event(e_event, e_location, e_food, e_date, e_time);
                     UploadTask uploadTask = new UploadTask();
                     //event should be created at this point already
                     uploadTask.execute(createdEvent);
                 }
+
             }
         });
 
@@ -125,20 +138,6 @@ public class AddWindow extends Activity{
                 //finish();
             }
         });
-    }
-
-    public boolean validateEvent() {
-        if (validateFoodText()
-                && validateDateText()
-                && validateLocationText()
-                && validateTimeText()) {
-            createdEvent = new Event(this.e_event,
-                    this.e_location,
-                    this.e_food,
-                    this.e_date,
-                    this.e_time);
-        }
-        return false;
     }
 
     protected boolean validateFoodText() {

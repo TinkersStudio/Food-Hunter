@@ -81,7 +81,7 @@ public class EventList extends AppCompatActivity {
         m_eventRef = m_rootRef.child("events");
         //event listener
 
-        m_eventRef.orderByChild("date").addChildEventListener(new ChildEventListener() {
+        m_eventRef.orderByChild("date").limitToLast(100).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(com.firebase.client.DataSnapshot dataSnapshot, String s) {
                 Event event = dataSnapshot.getValue(Event.class);
@@ -207,7 +207,7 @@ public class EventList extends AppCompatActivity {
      * @param event
      */
     protected void addEvent(Event event) {
-        this.eventList.add(event);
+        this.eventList.add(0,event);
         this.eventAdapter.notifyDataSetChanged();
     }
 

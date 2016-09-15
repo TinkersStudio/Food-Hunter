@@ -1,11 +1,15 @@
 package edu.hackathon.foodhunter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by kid on 8/9/16.
@@ -89,11 +96,13 @@ public class AddWindow extends Activity{
      * If the event is not correct display the error
      */
     public void initListener() {
-        huntButton.setOnClickListener(new View.OnClickListener() {
+        huntButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
                 /** Get the value to the variable*/
+
                 AddWindow.this.e_date = AddWindow.this.dateText.getText().toString().trim();
                 AddWindow.this.e_event = AddWindow.this.eventText.getText().toString().trim();
                 AddWindow.this.e_food = AddWindow.this.foodText.getText().toString().trim();
@@ -118,13 +127,22 @@ public class AddWindow extends Activity{
                             Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    //Testing
+                    //TODO Update a SnackBar to display completion
                     createdEvent = new Event(e_event, e_location, e_food, e_date, e_time);
                     UploadTask uploadTask = new UploadTask();
                     //event should be created at this point already
-                    uploadTask.execute(createdEvent);
+                    try {
+                        //run a parallel task to upload
+                        String status = uploadTask.execute(createdEvent).get(2000, TimeUnit.MICROSECONDS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (TimeoutException e) {
+                        e.printStackTrace();
+                    }
+                    AddWindow.super.onBackPressed();
                 }
-
             }
         });
 
@@ -132,7 +150,112 @@ public class AddWindow extends Activity{
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //finish();
+                AddWindow.super.onBackPressed();
+            }
+        });
+
+
+        foodText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_UP)
+                {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        if (foodText.getText() != null)
+                        {
+                            e_food = foodText.getText().toString().trim();
+
+                        }
+						/* Hide keyboard when done */
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(foodText.getWindowToken(), 0);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        locationText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_UP)
+                {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        if (locationText.getText() != null)
+                        {
+                            e_location = locationText.getText().toString().trim();
+
+                        }
+						/* Hide keyboard when done */
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(locationText.getWindowToken(), 0);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        eventText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_UP)
+                {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        if (eventText.getText() != null)
+                        {
+                            e_event = eventText.getText().toString().trim();
+
+                        }
+						/* Hide keyboard when done */
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(eventText.getWindowToken(), 0);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        dateText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_UP)
+                {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        if (dateText.getText() != null)
+                        {
+                            e_date = dateText.getText().toString().trim();
+
+                        }
+						/* Hide keyboard when done */
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(dateText.getWindowToken(), 0);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        timeText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_UP)
+                {
+                    if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        if (timeText.getText() != null)
+                        {
+                            e_time = timeText.getText().toString().trim();
+                        }
+						/* Hide keyboard when done */
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(timeText.getWindowToken(), 0);
+                        return true;
+                    }
+                }
+                return false;
             }
         });
     }
@@ -205,14 +328,13 @@ public class AddWindow extends Activity{
 
                 Map<String, Object> childUpdates = new HashMap<>();
                 childUpdates.put("/events/"+key, eventValues);
-
-
                 //send it to the server
                 mDatabase.updateChildren(childUpdates);
             }
             catch (Exception e) {
                 Log.d(AddWindow.this.TAG, "Error in downloading");
             }
+
             return "Success";
         }
 
@@ -220,14 +342,13 @@ public class AddWindow extends Activity{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(AddWindow.this, "Start uploading...", Toast.LENGTH_SHORT).show();
+            Log.d(AddWindow.this.TAG, "Uploading the data");
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPreExecute();
-            Toast.makeText(AddWindow.this, "Finish uploading...", Toast.LENGTH_SHORT).show();
-
+            Log.d(AddWindow.this.TAG, "Complete updating the database");
         }
     }
 }

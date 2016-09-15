@@ -41,9 +41,6 @@ public class EventList extends AppCompatActivity {
     /**List of event*/
     protected ArrayList<Event> eventList;
 
-    /*Sorted list*/
-    protected ArrayList<Event> sortedList;
-
     /**ViewGroup for maintaining the list of view*/
     protected RecyclerView eventLayout;
 
@@ -55,6 +52,8 @@ public class EventList extends AppCompatActivity {
 
     /**Reference to the root of the app's database*/
     Firebase m_rootRef;
+
+    Firebase m_eventRef;
 
     /*Debugging TAG. Use in log*/
     private static final String TAG = Activity.class.getName();
@@ -69,7 +68,6 @@ public class EventList extends AppCompatActivity {
 
         /*The origin list*/
         this.eventList = new ArrayList<Event>();
-        this.sortedList = new ArrayList<Event>();
 
          /*Setup the adapter view*/
         eventAdapter = new EventListAdapter(this.eventList);
@@ -77,14 +75,13 @@ public class EventList extends AppCompatActivity {
 
         //Event break at firebase ref
         Firebase.setAndroidContext(this);
-        //FIXME Can't retrieve the database
         m_rootRef = new Firebase("https://food-hunter-f8f29.firebaseio.com/");
 
         //reference to nodes
-        Firebase m_eventRef = m_rootRef.child("events");
+        m_eventRef = m_rootRef.child("events");
         //event listener
 
-        m_eventRef.addChildEventListener(new ChildEventListener() {
+        m_eventRef.orderByChild("date").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(com.firebase.client.DataSnapshot dataSnapshot, String s) {
                 Event event = dataSnapshot.getValue(Event.class);
@@ -160,7 +157,7 @@ public class EventList extends AppCompatActivity {
      * Initialize all listener
      */
     protected void initListener() {
-        //mainMenu = (Menu)findViewById(R.id.)
+
     }
 
     /**
@@ -186,10 +183,7 @@ public class EventList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         //have to use the selection above
         switch (item.getItemId()) {
-            case R.id.menu_filter:
-                sort();
-                //point the list over
-                eventList = sortedList;
+            case R.id.submenu_refresh:
                 break;
             case R.id.top_menu_add:
                 updateEvent();
@@ -207,32 +201,14 @@ public class EventList extends AppCompatActivity {
         eventAdapter.notifyDataSetChanged();
         return true;
     }
-    /**
-     * This will download the list of the event from the server.
-     * The method will parse the input from the server and return the correct list of event
-     * @return ArrayList</Event> the list of the event from the firebase server
-     */
-    protected ArrayList<Event> getEventList() {
-        //TODO:Retrieve the list of event from Firebase server
-        return new ArrayList<Event>();
-    }
 
     /**
      * Add the event to the list and notify the adapter
      * @param event
      */
     protected void addEvent(Event event) {
-        this.sortedList.add(event);
         this.eventList.add(event);
         this.eventAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Sort the list of the event in the sortList
-     */
-    protected void sort() {
-        //should sort main list
-        Collections.sort(sortedList);
     }
 
     /**
@@ -242,51 +218,5 @@ public class EventList extends AppCompatActivity {
     protected void updateEvent () {
         Intent addWindow = new Intent(this.getBaseContext(), AddWindow.class);
         startActivity(addWindow);
-    }
-
-    /**
-     * Load the display of the main screen
-     * This is called when the user pull to load the screen
-     */
-    protected void loadMainScreen () {
-        eventList = getEventList();
-        //data will be changed so need to notify adapter
-        eventAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Inner class that handle downloading
-     */
-    public class DownloadTask extends AsyncTask<Void, Void, String> {
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p/>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param params The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
-        @Override
-        protected String doInBackground(Void... params) {
-            return "Success";
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Toast.makeText(EventList.this, "Start downloading...", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPreExecute();
-            Toast.makeText(EventList.this, "Finish downloading...", Toast.LENGTH_SHORT).show();
-        }
     }
 }

@@ -12,8 +12,8 @@
         app:showAsAction="always|withText">
         <menu>
             <item
-                android:id="@+id/submenu_sort"
-                android:title="@string/top_menu_sort" />
+                android:id="@+id/submenu_refresh"
+                android:title="Refresh" />
             <item
                 android:id="@+id/submenu_share"
                 android:title="Share" />

@@ -24,7 +24,6 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     public EventViewHolder(View itemView) {
         /**call to super*/
         super(itemView);
-
         /*Initialize the component*/
         this.e_foodText = (TextView) itemView.findViewById(R.id.food_text_view);
         this.e_dayText = (TextView) itemView.findViewById(R.id.day_text_view);
@@ -39,12 +38,10 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
      */
     public void  setEvent(Event event) {
         this.event = event;
-
         this.e_foodText.setText(event.getFood());
         this.e_dayText.setText(event.getDate());
         this.e_locationText.setText(event.getLocation());
         this.e_timeText.setText(event.getTime());
         this.e_eventText.setText(event.getEvent());
-
     }
 }

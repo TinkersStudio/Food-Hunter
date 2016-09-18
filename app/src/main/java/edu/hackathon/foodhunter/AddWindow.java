@@ -167,7 +167,8 @@ public class AddWindow extends Activity{
 
                         }
 						/* Hide keyboard when done */
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(foodText.getWindowToken(), 0);
                         return true;
                     }

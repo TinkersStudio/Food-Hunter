@@ -14,9 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,9 +49,9 @@ public class EventList extends AppCompatActivity {
     protected Menu mainMenu;
 
     /**Reference to the root of the app's database*/
-    Firebase m_rootRef;
+    DatabaseReference m_rootRef;
 
-    Firebase m_eventRef;
+    DatabaseReference m_eventRef;
 
     /*Debugging TAG. Use in log*/
     private static final String TAG = Activity.class.getName();
@@ -74,40 +72,41 @@ public class EventList extends AppCompatActivity {
         eventLayout.setAdapter(eventAdapter);
 
         //Event break at firebase ref
-        Firebase.setAndroidContext(this);
-        m_rootRef = new Firebase("https://food-hunter-f8f29.firebaseio.com/");
+        m_rootRef = FirebaseDatabase.getInstance().getReference();
 
         //reference to nodes
         m_eventRef = m_rootRef.child("events");
         //event listener
 
-        m_eventRef.orderByChild("date").limitToLast(100).addChildEventListener(new ChildEventListener() {
+        m_eventRef.orderByChild("date").limitToLast(100).addChildEventListener(new ChildEventListener()
+        {
             @Override
-            public void onChildAdded(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Event event = dataSnapshot.getValue(Event.class);
                 EventList.this.addEvent(event);
                 Log.v(TAG, "Add new value");
             }
 
             @Override
-            public void onChildChanged(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Event event = dataSnapshot.getValue(Event.class);
                 Log.v(TAG, "Modify the value");
             }
 
+
             @Override
-            public void onChildRemoved(com.firebase.client.DataSnapshot dataSnapshot) {
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Event event = dataSnapshot.getValue(Event.class);
                 Log.v(TAG, "Removed event");
             }
 
             @Override
-            public void onChildMoved(com.firebase.client.DataSnapshot dataSnapshot, String s) {
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 //IGNORE for now
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError  firebaseError) {
                 Log.v(TAG, "Cancel due to error");
             }
         });
@@ -184,6 +183,8 @@ public class EventList extends AppCompatActivity {
         //have to use the selection above
         switch (item.getItemId()) {
             case R.id.submenu_refresh:
+                Toast.makeText(getApplicationContext(), "Refreshing..",
+                        Toast.LENGTH_SHORT).show();
                 break;
             case R.id.top_menu_add:
                 updateEvent();

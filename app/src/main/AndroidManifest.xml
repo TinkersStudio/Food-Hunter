@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme" >
         <!--SplashScreen-->
         <activity
-            android:name=".SplashScreen">
+            android:name=".activities.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,15 +20,15 @@
         </activity>
         <!--First window-->
         <activity
-            android:name=".EventList"
+            android:name=".activities.MainActivity"
             android:label="Food Hunter" >
         </activity>
         <activity
-            android:name=".AddWindow"
+            android:name=".activities.AddWindow"
             android:label="Food Hunter" >
         </activity>
 
-        <service android:name=".MyFirebaseMessagingService" >
+        <service android:name=".util.MyFirebaseMessagingService" >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

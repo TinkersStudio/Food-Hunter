@@ -1,9 +1,12 @@
-package edu.hackathon.foodhunter;
+package edu.hackathon.foodhunter.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import edu.hackathon.foodhunter.R;
+import edu.hackathon.foodhunter.model.Event;
 
 /**
  * Created by kid on 8/6/16.

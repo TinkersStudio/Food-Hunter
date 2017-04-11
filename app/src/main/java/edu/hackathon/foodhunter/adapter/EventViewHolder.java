@@ -1,8 +1,11 @@
-package edu.hackathon.foodhunter;
+package edu.hackathon.foodhunter.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import edu.hackathon.foodhunter.R;
+import edu.hackathon.foodhunter.model.Event;
 
 /**
  * Created by kid on 8/6/16.

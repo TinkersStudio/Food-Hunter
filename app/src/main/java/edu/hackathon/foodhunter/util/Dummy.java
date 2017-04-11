@@ -1,8 +1,8 @@
-package edu.hackathon.foodhunter.tool;
+package edu.hackathon.foodhunter.util;
 
 import java.util.ArrayList;
 
-import edu.hackathon.foodhunter.Event;
+import edu.hackathon.foodhunter.model.Event;
 
 /**
  * Created by kid on 8/8/16.

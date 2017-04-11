@@ -1,6 +1,4 @@
-package edu.hackathon.foodhunter;
-
-import android.widget.Toast;
+package edu.hackathon.foodhunter.model;
 
 import java.text.DateFormat;
 import java.text.ParseException;

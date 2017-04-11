@@ -1,4 +1,4 @@
-package edu.hackathon.foodhunter;
+package edu.hackathon.foodhunter.adapter;
 
 /**
  * Created by kid on 8/7/16.
@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.List;
+
+import edu.hackathon.foodhunter.R;
+import edu.hackathon.foodhunter.model.Event;
 
 /**Bind EventViewHolder and the data*/
 public class EventListAdapter extends RecyclerView.Adapter<EventViewHolder>{

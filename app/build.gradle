@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
 
     defaultConfig {
         applicationId "edu.hackathon.foodhunter"
         minSdkVersion 11
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -35,6 +35,8 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.4.0'
     compile 'com.google.firebase:firebase-messaging:9.4.0'
     compile 'com.android.support:design:24.2.1'
+    //Library for toasty
+    compile 'com.github.GrenderG:Toasty:1.1.2'
 }
 
 // Add to the bottom of the file

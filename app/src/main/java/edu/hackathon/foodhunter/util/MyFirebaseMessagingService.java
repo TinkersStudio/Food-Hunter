@@ -1,4 +1,4 @@
-package edu.hackathon.foodhunter;
+package edu.hackathon.foodhunter.util;
 
 
 import android.app.NotificationManager;
@@ -12,6 +12,9 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import edu.hackathon.foodhunter.activities.MainActivity;
+import edu.hackathon.foodhunter.R;
 
 /**
  * Created by kid on 9/18/16.
@@ -34,7 +37,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     //This method is only generating push notification
     //It is same as we did in earlier posts
     private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, EventList.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);

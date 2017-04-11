@@ -1,33 +1,31 @@
-package edu.hackathon.foodhunter;
+package edu.hackathon.foodhunter.activities;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import edu.hackathon.foodhunter.model.Event;
+import edu.hackathon.foodhunter.R;
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by kid on 8/9/16.
@@ -110,21 +108,17 @@ public class AddWindow extends Activity{
                 AddWindow.this.e_location = AddWindow.this.locationText.getText().toString().trim();
 
                 if (!validateTimeText()) {
-                    Toast.makeText(getApplicationContext(), "Missing time",
-                            Toast.LENGTH_SHORT).show();
+                    Toasty.error(getApplicationContext(), "Missing time", Toast.LENGTH_SHORT, true).show();
                 }
                 else if(!validateLocationText()) {
-                    Toast.makeText(getApplicationContext(), "Missing location",
-                            Toast.LENGTH_SHORT).show();
+                    Toasty.error(getApplicationContext(), "Missing location", Toast.LENGTH_SHORT, true).show();
                 }
                 else if(!validateDateText()) {
-                    Toast.makeText(getApplicationContext(), "Missing date or wrong format. " +
-                                    "Correct format: MM/dd/yyyy",
-                            Toast.LENGTH_SHORT).show();
+                    Toasty.error(getApplicationContext(),  "Missing date or wrong format. " +
+                            "Correct format: MM/dd/yyyy", Toast.LENGTH_SHORT, true).show();
                 }
                 else if(!validateFoodText()) {
-                    Toast.makeText(getApplicationContext(), "Missing food",
-                            Toast.LENGTH_SHORT).show();
+                    Toasty.error(getApplicationContext(), "Missing food", Toast.LENGTH_SHORT, true).show();
                 }
                 else {
                     //TODO Update a SnackBar to display completion
@@ -324,7 +318,7 @@ public class AddWindow extends Activity{
             //upload the event in here
 
             try {
-                String key = AddWindow.this.mDatabase.child("events").push().getKey();
+                String key = AddWindow.this.mDatabase.child("evTextViewents").push().getKey();
                 Map<String, Object> eventValues = createdEvent.toMap();
 
                 Map<String, Object> childUpdates = new HashMap<>();
